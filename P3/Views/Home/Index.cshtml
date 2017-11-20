@@ -6,10 +6,7 @@
     ViewBag.Title = "Home Page";
 }
 
-<div class="jumbotron">
-    <h1>Tickets</h1>
-    <p class="lead">Bienvenido (a) seleccione sus entrada para el partido</p>
-</div>
+<br />
 
 <div class="row">
     <div class="col-md-6">
@@ -17,83 +14,77 @@
     </div>
     <div class="col-md-6">
         
-        @using (Html.BeginForm())
+        @using (Html.BeginForm("BuyTickets", "Home", FormMethod.Post, new { @class = "form-horizontal well" }))
         {
             @Html.AntiForgeryToken()
 
-            <div class="form-horizontal">
-                <hr />
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <fieldset>
+                <legend>Compra</legend>
+            </fieldset>
 
-                <div class="form-group">
-                    <label class="col-md-2 control-label" for="textinput">Sección</label>
-                    <div class="col-md-10">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="textinput">Sección</label>
+                <div class="col-md-10">
                       
-                        @Html.DropDownListFor(e => e.SelectedSection, Model.SectionsSelectList, "Sección", new { @class = "form-control input-md", @onchange = "LoadSectionInformation(this.value)" })
-                    </div>
+                    @Html.DropDownListFor(e => e.SelectedSection, Model.SectionsSelectList, new { @class = "form-control input-md", @onchange = "LoadSectionInformation(this.value)" })
                 </div>
+            </div>
 
-                <div class="form-group">
-                    <label class="col-md-2 control-label" for="textinput">Costo</label>
-                    <div class="col-md-10">
-                        <label class="control-label" id="lblPriceSection">0</label>
-                    </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="textinput">Costo</label>
+                <div class="col-md-10">
+                    <label class="control-label" id="lblPriceSection">0</label>
                 </div>
+            </div>
 
-                <div class="form-group">
-                    <label class="col-md-2 control-label" for="textinput">Asientos disponibles</label>
-                    <div class="col-md-10">
-                        <label class="control-label" id="lblAvailableSeats">0</label>
-                    </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="textinput">Asientos disponibles</label>
+                <div class="col-md-10">
+                    <label class="control-label" id="lblAvailableSeats">0</label>
                 </div>
+            </div>
 
-                <div class="form-group">
-                    <label class="col-md-2 control-label" for="textinput">Asientos comprados</label>
-                    <div class="col-md-10">
-                        <label class="control-label" id="lblSeatsSold">0</label>
-                    </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="textinput">Asientos comprados</label>
+                <div class="col-md-10">
+                    <label class="control-label" id="lblSeatsSold">0</label>
                 </div>
+            </div>
 
              
 
-                <div class="form-group">
-                    <label class="col-md-2 control-label" for="textinput">Cantidad</label>
-                    <div class="col-md-10">
-                        @Html.EditorFor(e => e.QuantityToBuy, new { htmlAttributes = new { @class = "form-control" } })
-                    </div>
-                </div>
-    
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Comprar" class="btn btn-success" />
-                    </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="textinput">Cantidad</label>
+                <div class="col-md-10">
+                    @Html.EditorFor(e => e.QuantityToBuy, new { htmlAttributes = new { @class = "form-control", @onchange = " LoadTotal()" } })
                 </div>
             </div>
+
+              
+    
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Comprar" class="btn btn-success" />
+                </div>
+            </div>
+           
         }
+
+        <form class="form-horizontal well">
+            <fieldset>
+                <legend>Detalle de la compra</legend>
+            </fieldset>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="textinput">Total</label>
+                <div class="col-md-10">
+                    <label class="control-label" id="lblPriceOfSeatsSelected">0</label>
+                </div>
+            </div>
+        </form>
+   
 
     </div>
 </div>
 
-<script>
-
-    function LoadSectionInformation(selectedId)
-    {
-      
-        $.ajax({
-            url: '/Home/GetSection',
-            type: "GET",
-            dataType: "JSON",
-            data: { id: selectedId },
-            success: function (section) {
-                $('#lblPriceSection').text(section.Price);
-                $('#lblAvailableSeats').text(section.QuantitySeatsAvailable);
-                $('#lblSeatsSold').text(section.QuantitySeatsSold);
-            },
-            error: function (error) {
-
-            }
-            
-        });
-    }
-
-</script>
