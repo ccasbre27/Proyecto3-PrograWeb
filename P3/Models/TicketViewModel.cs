@@ -11,11 +11,11 @@ namespace P3.Models
     {
         public SelectList SectionsSelectList { get; set; }
 
-        public Section SelectedSection { get; set; }
+        public int IndexOfSelectedSection { get; set; }
 
         public int QuantityToBuy { get; set; }
 
-        public TicketViewModel(List<Section> sectionsList)
+        public TicketViewModel(List<Section> sectionsList, int selectedIndex = 1)
         {
             List<int> disabledItems = new List<int>();
 
@@ -31,8 +31,10 @@ namespace P3.Models
                 
             }
             
-            SectionsSelectList = new SelectList(sectionsList, "Id", "Name", "1", disabledValues: disabledItems);
+            SectionsSelectList = new SelectList(sectionsList, "Id", "Name", selectedValue: selectedIndex, disabledValues: disabledItems);
         }
+
+        
 
     }
 }

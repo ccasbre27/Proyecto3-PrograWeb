@@ -44,3 +44,4 @@ function LoadTotal() {
         $('#lblPriceOfSeatsSelected').text("Debe seleccionar una sección");
     }
 }
+
